@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <img src="./12.jpg" alt="" width="200px" /><br /> -->
+    <canvas width="500px" height="500px" id="tutorial"></canvas>
+  </body>
+</html>
+<script>
+  /** @type {HTMLCanvasElement} */
+  let canvas = document.getElementById("tutorial");
+
+  let draw = () => {
+    let ctx = canvas.getContext("2d");
+    if (!canvas.getContext) return;
+    // ctx.fillStyle = "rgb(125,55,188)";
+    // ctx.strokeRect(50, 50, 100, 55);
+    // ctx.fillStyle = "rgba(0,5,200,0.5)";
+    // ctx.fillRect(50, 120, 100, 100);
+    // ctx.clearRect(60, 150, 50, 25);
+
+    // ctx.beginPath();
+    // ctx.moveTo(50, 50);
+    // ctx.lineTo(200, 50);
+    // ctx.lineTo(200, 200);
+    // ctx.lineTo(100, 200);
+    // ctx.closePath();
+    // ctx.fillStyle = "rgba(0,25,188,0.5)";
+    // ctx.fill();
+    // ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.arc(200, 200, 80, 0, Math.PI, false);
+    // ctx.fillStyle = "rgba(0,25,188,0.5)";
+    // ctx.fill();
+
+    // 参数1、2：控制点1坐标   参数3、4：控制点2坐标  参数4：圆弧半径
+    // ctx.beginPath();
+    // ctx.moveTo(50, 50);
+    // ctx.arcTo(200, 50, 200, 200, 80);
+    // ctx.lineTo(200, 200);
+    // ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.moveTo(50, 200);
+    // ctx.quadraticCurveTo(125, 50, 200, 200);
+    // ctx.moveTo(200, 200);
+    // ctx.quadraticCurveTo(275, 350, 350, 200);
+    // ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.moveTo(50, 200);
+    // ctx.bezierCurveTo(150, 50, 250, 350, 450, 200);
+    // ctx.stroke();
+
+    // for (var i = 0; i < 15; i++) {
+    //   for (var j = 0; j < 15; j++) {
+    //     ctx.fillStyle =
+    //       "rgb(" +
+    //       Math.floor(255 - 17 * i) +
+    //       "," +
+    //       Math.floor(255 - 17 * j) +
+    //       ",0)";
+    //     ctx.fillRect(j * 50, i * 50, 50, 50);
+    //   }
+    // }
+
+    // let randomNum = () => Math.floor(Math.random() * 256);
+    // for (var i = 0; i < 15; i++) {
+    //   for (var j = 0; j < 15; j++) {
+    //     ctx.strokeStyle = `rgb(${randomNum()},${randomNum()},${randomNum()})`;
+    //     ctx.strokeRect(j * 31 + 20, i * 31 + 20, 26, 26);
+    //   }
+    // }
+
+    // let lineCaps = ["butt", "round", "square"];
+    // ctx.lineWidth = 20;
+    // ctx.strokeStyle = "black";
+    // lineCaps.forEach((val, index) => {
+    //   ctx.beginPath();
+    //   ctx.moveTo((index + 1) * 50, 50);
+    //   ctx.lineTo((index + 1) * 50, 200);
+    //   ctx.lineCap = val;
+    //   ctx.stroke();
+    // });
+    // ctx.beginPath();
+    // ctx.moveTo(0, 50);
+    // ctx.lineTo(500, 50);
+    // ctx.moveTo(0, 200);
+    // ctx.lineTo(500, 200);
+    // ctx.strokeStyle = "green";
+    // ctx.lineWidth = 1;
+    // ctx.stroke();
+
+    // ctx.lineWidth = "20";
+    // ctx.lineJoin = "miter";
+    // ctx.beginPath();
+    // ctx.moveTo(100, 350);
+    // ctx.lineTo(180, 100);
+    // ctx.lineTo(260, 350);
+    // ctx.lineTo(50, 190);
+    // ctx.lineTo(310, 190);
+    // ctx.lineTo(100, 350);
+    // ctx.closePath();
+    // ctx.strokeStyle = "rgba(0,5,200,0.5)";
+    // ctx.stroke();
+
+    // ctx.setLineDash([20, 5]); // [实线长度, 间隙长度]
+    // ctx.lineDashOffset = 5;
+    // ctx.strokeRect(50, 50, 210, 210);
+
+    // ctx.font = "120px cursive";
+    // ctx.fillText("版权所有", 10, 120);
+    // ctx.strokeText("版权所有", 10, 250);
+
+    // let img = new Image();
+    // img.onload = () => {
+    //   ctx.drawImage(img, 0, 0);
+    // };
+    // img.src = "./12.jpg";
+
+    // let img = document.querySelector("img");
+    // ctx.drawImage(img, 0, 0, 400, 200);
+    // ctx.drawImage(img, 0, 0, 400, 300, 0, 400, 120, 80);
+
+    // ctx.fillRect(0, 0, 150, 150); // 使用默认设置绘制一个矩形
+    // ctx.save(); // 保存默认状态
+
+    // ctx.fillStyle = "red"; // 在原有配置基础上对颜色做改变
+    // ctx.fillRect(15, 15, 120, 120); // 使用新的设置绘制一个矩形
+
+    // ctx.save(); // 保存当前状态
+    // ctx.fillStyle = "blue"; // 再次改变颜色配置
+    // ctx.fillRect(30, 30, 90, 90); // 使用新的配置绘制一个矩形
+
+    // ctx.restore(); // 重新加载之前的颜色状态
+    // ctx.fillRect(45, 45, 60, 60); // 使用上一次的配置绘制一个矩形
+
+    // ctx.restore(); // 加载默认颜色配置
+    // ctx.fillRect(60, 60, 30, 30); // 使用加载的配置绘制一个矩形
+    // ctx.save();
+    // ctx.translate(100, 100);
+    // ctx.strokeRect(0, 0, 100, 100);
+    // ctx.restore();
+    // ctx.translate(220, 220);
+    // ctx.fillRect(0, 0, 100, 100);
+
+    // ctx.fillStyle = "red";
+    // ctx.save();
+    // ctx.translate(100, 100);
+    // ctx.rotate((Math.PI / 180) * 45);
+    // ctx.fillStyle = "blue";
+    // ctx.fillRect(0, 0, 100, 100);
+    // ctx.restore();
+    // ctx.save();
+    // ctx.fillRect(0, 0, 50, 50);
+    // ctx.restore();
+    // ctx.translate(100, 100);
+    // ctx.save();
+    // ctx.fillStyle = "yellow";
+    // ctx.scale(0.8, 0.8);
+    // ctx.fillRect(0, 200, 100, 100);
+    // ctx.restore();
+    // ctx.fillStyle = "black";
+    // ctx.fillRect(0, 0, 10, 10);
+
+    // ctx.transform(1, 1, 0, 1, 1, 0);
+    // ctx.fillRect(100, 100, 100, 100);
+
+    // ctx.fillStyle = "blue";
+    // ctx.fillRect(0, 0, 200, 200);
+    //source-over/in/out/atop,destination-over/in/out/atop,lighter,darken,lighten,xor
+    // ctx.globalCompositeOperation = "xor";
+    // ctx.fillStyle = "red";
+    // ctx.fillRect(100, 100, 200, 200);
+
+    ctx.lineWidth = "10";
+    ctx.lineJoin = "miter";
+    ctx.beginPath();
+    ctx.moveTo(100, 350);
+    ctx.lineTo(180, 100);
+    ctx.lineTo(260, 350);
+    ctx.lineTo(50, 190);
+    ctx.lineTo(310, 190);
+    ctx.lineTo(100, 350);
+    ctx.closePath();
+    ctx.strokeStyle = "rgb(0,5,200)";
+    // ctx.stroke();
+    ctx.clip();
+    ctx.fillStyle = "red";
+    ctx.fillRect(30, 80, 400, 400);
+  };
+  // setTimeout(draw, 10);
+  draw();
+</script>
+<style>
+  canvas {
+    border: 1px solid #ccc;
+  }
+</style>

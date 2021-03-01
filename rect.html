@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <button id="btn">切换图片</button><br />
+    <canvas width="500px" height="500px" id="tutorial"></canvas>
+  </body>
+</html>
+<script>
+  // 画布内容拖拽的构造函数
+  class Drag {
+    constructor(params = {}) {
+      const {
+        width,
+        height,
+        positionX,
+        positionY,
+        color,
+        canvas,
+        img
+      } = params;
+      this.width = width;
+      this.height = height;
+      this.positionX = positionX;
+      this.positionY = positionY;
+      this.color = color;
+      this.canvas = canvas;
+      this.img = img;
+    }
+    init() {
+      this.drawing();
+      this.initEvent();
+    }
+    drawing() {
+      let ctx = this.canvas.getContext("2d");
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      ctx.drawImage(
+        this.img,
+        this.positionX,
+        this.positionY,
+        this.width,
+        this.height
+      );
+    }
+    // 获取画布内的鼠标坐标
+    windowClient(x, y) {
+      let canvasMess = this.canvas.getBoundingClientRect();
+      return { x: x - canvasMess.x, y: y - canvasMess.y };
+    }
+    // 判断是否在图片区域
+    isRect(e) {
+      let canvasClient = this.windowClient(e.clientX, e.clientY);
+      let hasRectX =
+        canvasClient.x > this.positionX &&
+        canvasClient.x < this.positionX + this.width;
+      let hasRectY =
+        canvasClient.y > this.positionY &&
+        canvasClient.y < this.positionY + this.height;
+      return hasRectX && hasRectY;
+    }
+    mousedown(e) {
+      let flag = this.isRect(e);
+      if (flag) {
+        let downClient = this.windowClient(e.clientX, e.clientY);
+        let _x = downClient.x - this.positionX;
+        let _y = downClient.y - this.positionY;
+        this.canvas.onmousemove = (e) => {
+          let moveClient = this.windowClient(e.clientX, e.clientY);
+          this.positionX = moveClient.x - _x;
+          this.positionY = moveClient.y - _y;
+          this.positionX < 0 && (this.positionX = 0);
+          this.positionX > this.canvas.width - this.width &&
+            (this.positionX = this.canvas.width - this.width);
+          this.positionY < 0 && (this.positionY = 0);
+          this.positionY > this.canvas.height - this.height &&
+            (this.positionY = this.canvas.height - this.height);
+          // this.drawing();
+          requestAnimationFrame(this.drawing.bind(this));
+          this.canvas.onmouseleave = (e) => {
+            this.mouseup(e);
+          };
+        };
+      }
+    }
+    mousemove(e) {
+      let flag = this.isRect(e);
+      if (flag) {
+        this.canvas.style.cursor = "move";
+      } else {
+        this.canvas.style.cursor = "default";
+      }
+    }
+    mouseup(e) {
+      this.canvas.onmousemove = null;
+      this.canvas.onmousemove = (e) => {
+        this.mousemove(e);
+      };
+    }
+    // 给画布注册事件
+    initEvent() {
+      this.canvas.onmousemove = (e) => {
+        this.mousemove(e);
+      };
+      this.canvas.onmousedown = (e) => {
+        this.mousedown(e);
+      };
+      this.canvas.onmouseup = (e) => {
+        this.mouseup(e);
+      };
+    }
+  }
+
+  // 初始化画布
+  let loadingImg = () => {
+    let obj = {
+      width: 100,
+      height: 100,
+      positionX: 50,
+      positionY: 150,
+      color: "skyblue",
+      canvas: document.getElementById("tutorial"),
+      img
+    };
+    let drawRect = new Drag(obj);
+    drawRect.init();
+  };
+  // 创建图片实例
+  let img = new Image();
+  img.src = "./12.jpg";
+  img.onload = loadingImg;
+  // 切换图片
+  let btn = document.getElementById("btn");
+  let count = 0;
+  let imgList = ["./12.jpg", "./1.png", "./2.png", "./3.png"];
+  btn.onclick = () => {
+    count++;
+    count > 3 && (count = 0);
+    img.src = imgList[count];
+    img.onload = loadingImg;
+  };
+
+  window.addEventListener("mousewheel", fn, false);
+  window.addEventListener("DOMMousewheel", fn, false);
+  function fn(event) {
+    var delta = 0;
+    if (!event) event = window.event;
+    if (event.wheelDelta) {
+      //IE、chrome浏览器使用的是wheelDelta，并且值为“正负120”
+      console.log("chrome:::", event.wheelDelta);
+      delta = event.wheelDelta / 120;
+      if (window.opera) delta = -delta; //因为IE、chrome等向下滚动是负值，FF是正值，为了处理一致性，在此取反处理
+    } else if (event.detail) {
+      console.log("FF");
+      //FF浏览器使用的是detail,其值为“正负3”
+      delta = -event.detail / 3;
+    }
+    if (delta) console.log(delta);
+    // handle(delta);
+  }
+</script>
+<style>
+  #tutorial {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+  }
+</style>
