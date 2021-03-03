@@ -32,6 +32,8 @@
       this.color = color;
       this.canvas = canvas;
       this.img = img;
+      this.step = 1;
+      this.oldStep = 1;
     }
     init() {
       this.drawing();
@@ -74,18 +76,28 @@
           let moveClient = this.windowClient(e.clientX, e.clientY);
           this.positionX = moveClient.x - _x;
           this.positionY = moveClient.y - _y;
-          this.positionX < 0 && (this.positionX = 0);
-          this.positionX > this.canvas.width - this.width &&
-            (this.positionX = this.canvas.width - this.width);
-          this.positionY < 0 && (this.positionY = 0);
-          this.positionY > this.canvas.height - this.height &&
-            (this.positionY = this.canvas.height - this.height);
-          // this.drawing();
+          // this.positionX < 0 && (this.positionX = 0);
+          // this.positionX > this.canvas.width - this.width &&
+          //   (this.positionX = this.canvas.width - this.width);
+          // this.positionY < 0 && (this.positionY = 0);
+          // this.positionY > this.canvas.height - this.height &&
+          //   (this.positionY = this.canvas.height - this.height);
           requestAnimationFrame(this.drawing.bind(this));
           this.canvas.onmouseleave = (e) => {
             this.mouseup(e);
           };
         };
+        // 全局注册鼠标滚轮事件
+        if (window.addEventListener) {
+          /** DOMMouseScroll is for mozilla. */
+          window.addEventListener(
+            "DOMMouseScroll",
+            this.wheel.bind(this),
+            false
+          );
+        }
+        /** IE/Opera/Chrome */
+        window.onmousewheel = document.onmousewheel = this.wheel.bind(this);
       }
     }
     mousemove(e) {
@@ -101,7 +113,45 @@
       this.canvas.onmousemove = (e) => {
         this.mousemove(e);
       };
+      window.onmousewheel = document.onmousewheel = null;
+      window.removeEventListener("DOMMouseScroll", this.wheel.bind(this));
     }
+    handle() {
+      let oldW = this.width;
+      let oldH = this.height;
+      this.width *= this.step / this.oldStep;
+      this.height *= this.step / this.oldStep;
+      let wDiff = this.width - oldW;
+      let hDiff = this.height - oldH;
+      // this.positionX -= wDiff;
+      // this.positionY -= hDiff;
+      console.log("oldW:::", oldW);
+      console.log("width:::", this.width);
+      this.drawing();
+    }
+    // 鼠标滚轮事件执行函数
+    wheel(event) {
+      this.oldStep = this.step;
+      let delta = 0;
+      if (!event) event = window.event;
+      if (event.wheelDelta) {
+        //IE、chrome浏览器使用的是wheelDelta，并且值为“正负150”
+        delta = event.wheelDelta / 300;
+        // if (delta < 0) {
+        //   delta = Math.abs(delta);
+        // }
+        this.step += delta;
+      } else if (event.detail) {
+        //FF浏览器使用的是detail,其值为“正负3”
+        //因为IE、chrome等向下滚动是负值，FF是正值，为了处理一致性，在此取反处理
+        delta = -event.detail / 6;
+        console.log("FF:::", delta);
+      }
+      this.step = Math.max(0.5, this.step);
+      this.step > 6 && (this.step = 6);
+      this.handle();
+    }
+
     // 给画布注册事件
     initEvent() {
       this.canvas.onmousemove = (e) => {
@@ -144,25 +194,6 @@
     img.src = imgList[count];
     img.onload = loadingImg;
   };
-
-  window.addEventListener("mousewheel", fn, false);
-  window.addEventListener("DOMMousewheel", fn, false);
-  function fn(event) {
-    var delta = 0;
-    if (!event) event = window.event;
-    if (event.wheelDelta) {
-      //IE、chrome浏览器使用的是wheelDelta，并且值为“正负120”
-      console.log("chrome:::", event.wheelDelta);
-      delta = event.wheelDelta / 120;
-      if (window.opera) delta = -delta; //因为IE、chrome等向下滚动是负值，FF是正值，为了处理一致性，在此取反处理
-    } else if (event.detail) {
-      console.log("FF");
-      //FF浏览器使用的是detail,其值为“正负3”
-      delta = -event.detail / 3;
-    }
-    if (delta) console.log(delta);
-    // handle(delta);
-  }
 </script>
 <style>
   #tutorial {
